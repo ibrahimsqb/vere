@@ -9,7 +9,13 @@ export default function Home() {
   const [expandedLog, setExpandedLog] = useState(null);
 
   const navigate = useNavigate();
-  const today = new Date().toISOString().split("T")[0];
+  // const today = new Date().toISOString().split("T")[0];
+  const today = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  // const today = "2026-01-09";
 
   useEffect(() => {
     fetchLogs();
@@ -42,9 +48,16 @@ export default function Home() {
     }
 
     // Recent logs (past 7 days, excluding today)
+    // const pastDate = new Date();
+    // pastDate.setDate(pastDate.getDate() - 7);
+    // const sevenDaysAgo = pastDate.toISOString().split("T")[0];
     const pastDate = new Date();
     pastDate.setDate(pastDate.getDate() - 7);
-    const sevenDaysAgo = pastDate.toISOString().split("T")[0];
+    const sevenDaysAgo = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(pastDate);
 
     const { data: recentData, error: recentError } = await supabase.from("wear_logs").select("id, fragrance_id, date, time_of_day, mood, rating, fragrances(name, brand)").eq("user_id", user.id).lt("date", today).gte("date", sevenDaysAgo).order("date", { ascending: false });
 
@@ -62,6 +75,25 @@ export default function Home() {
       setRecentLogs([]);
     }
   }
+
+  const handleDeleteLog = async (logId) => {
+    const confirmed = window.confirm("Remove this log entry?");
+    if (!confirmed) return;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { error } = await supabase.from("wear_logs").delete().eq("id", logId).eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to delete log:", error.message);
+      return;
+    }
+
+    setTodayLogs((prev) => prev.filter((log) => log.id !== logId));
+    setExpandedLog(null);
+  };
 
   return (
     <div className="min-h-screen bg-white px-6 py-16">
@@ -140,6 +172,9 @@ export default function Home() {
                           <p className="text-sm text-gray-700 leading-relaxed">{log.notes}</p>
                         </div>
                       )}
+                      <button onClick={() => handleDeleteLog(log.id)} className="text-xs text-gray-400 hover:text-red-500 transition">
+                        Remove entry
+                      </button>
                     </div>
                   )}
                 </div>
@@ -167,7 +202,7 @@ export default function Home() {
                     <p className="font-serif text-black text-base font-light">{log.fragrance_name}</p>
                     <div className="flex gap-4 mt-1">
                       <span className="text-xs text-gray-400">
-                        {new Date(log.date).toLocaleDateString("en-US", {
+                        {new Date(log.date + "T00:00:00").toLocaleDateString("en-US", {
                           weekday: "short",
                           month: "short",
                           day: "numeric",
