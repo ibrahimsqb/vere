@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@custom-variant hover (&:hover);
+
+/* @layer components {
+  .btn-primary {
+    @apply w-full text-sm font-medium text-white bg-violet-500 shadow-lg shadow-purple-600/5 p-[10px] rounded-md my-1 transition-colors duration-200;
+  }
+
+  .btn-primary:hover {
+    @apply bg-purple-600/15 text-purple-600 cursor-pointer;
+  }
+} */
