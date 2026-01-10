@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import AddLog from "./pages/AddLog";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddFragrance from "./pages/AddFragrance";
+import MyFragrances from "./pages/MyFragrances";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/add-log" element={<AddLog />} />
         <Route path="/add-fragrance" element={<AddFragrance />} />
+        <Route path="/my-fragrances" element={<MyFragrances />} />
       </Routes>
     </BrowserRouter>
   );

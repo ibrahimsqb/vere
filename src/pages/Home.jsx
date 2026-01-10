@@ -112,11 +112,16 @@ export default function Home() {
             month: "long",
           })}
         </p>
-
-        <button onClick={() => navigate("/add-fragrance")} className="text-xs font-light text-gray-700 hover:text-black transition mb-12 tracking-wide">
-          + ADD FRAGRANCE
-        </button>
-
+        <div>
+          <button onClick={() => navigate("/add-fragrance")} className="text-xs font-light text-gray-700 hover:text-black transition mb-6 tracking-wide">
+            + ADD FRAGRANCE
+          </button>
+        </div>
+        <div>
+          <button onClick={() => navigate("/my-fragrances")} className="text-xs font-light text-gray-700 hover:text-black transition mb-12 tracking-wide">
+            MY FRAGRANCES
+          </button>
+        </div>
         {/* Today */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
