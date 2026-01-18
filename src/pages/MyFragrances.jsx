@@ -24,7 +24,7 @@ const MyFragrances = () => {
       return;
     }
 
-    const { data, error } = await supabase.from("fragrances").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("fragrances").select("*").is("deleted_at", null).eq("user_id", user.id).order("created_at", { ascending: false });
 
     if (!error && data) setFragrances(data);
     setLoading(false);
@@ -38,7 +38,7 @@ const MyFragrances = () => {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { error } = await supabase.from("fragrances").delete().eq("id", fragranceId).eq("user_id", user.id);
+    const { error } = await supabase.from("fragrances").update({ deleted_at: new Date().toISOString() }).eq("id", fragranceId).eq("user_id", user.id);
 
     if (error) {
       console.log("Failed to delete fragrance:", error.message);
@@ -47,6 +47,10 @@ const MyFragrances = () => {
 
     // setFragrances((prev) => prev.filter((fragrance) => fragrance.id !== fragranceId));
     await fetchFragrances();
+  };
+
+  const handleFragranceUpdate = async (fragranceId) => {
+    navigate(`/edit-fragrance/${fragranceId}`);
   };
 
   if (loading)
@@ -104,7 +108,9 @@ const MyFragrances = () => {
                       <td className="px-6 py-5 text-sm text-gray-500 max-w-xs truncate">{f.notes || "—"}</td>
                       <td className="px-6 py-5 text-sm text-gray-500">{new Date(f.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                       <td className="px-6 py-5 text-sm text-right space-x-3">
-                        <button className="text-xs text-gray-500 hover:text-black transition tracking-wide">Edit</button>
+                        <button onClick={() => handleFragranceUpdate(f.id)} className="text-xs text-gray-500 hover:text-black transition tracking-wide">
+                          Edit
+                        </button>
                         <button onClick={() => handleFragranceDelete(f.id)} className="text-xs text-gray-400 hover:text-red-500 transition tracking-wide">
                           Delete
                         </button>

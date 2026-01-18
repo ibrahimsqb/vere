@@ -122,7 +122,7 @@ export default function Home() {
           </button>
         </div>
         {/* Today */}
-        <section className="mb-16">
+        <section className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xs font-light text-gray-500 tracking-widest uppercase">Today</h2>
             <button onClick={() => navigate("/add-log")} className="text-xs text-black hover:text-gray-600 transition tracking-wide font-light">

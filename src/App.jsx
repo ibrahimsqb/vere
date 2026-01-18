@@ -5,7 +5,7 @@ import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import AddLog from "./pages/AddLog";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AddFragrance from "./pages/AddFragrance";
+import AddFragrance from "./pages/FragranceForm";
 import MyFragrances from "./pages/MyFragrances";
 
 function App() {
@@ -39,6 +39,7 @@ function App() {
         <Route path="/add-log" element={<AddLog />} />
         <Route path="/add-fragrance" element={<AddFragrance />} />
         <Route path="/my-fragrances" element={<MyFragrances />} />
+        <Route path="/edit-fragrance/:id" element={<AddFragrance />} />
       </Routes>
     </BrowserRouter>
   );

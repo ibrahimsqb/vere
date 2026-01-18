@@ -24,12 +24,23 @@ export default function AddLog() {
   }, []);
 
   async function fetchFragrances() {
-    const { data } = await supabase
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+        
+    if (!user) {
+      setFragrances([])
+      return;
+    }
+    
+    const {data, error} = await supabase
       .from("fragrances")
       .select("id, name, brand, notes")
+      .eq("user_id", user.id)
+      .is("deleted_at", null)
       .order("created_at", { ascending: false });
 
-    setFragrances(data || []);
+    if(!error && data) setFragrances(data || []);
   }
 
   async function handleSubmit(e) {
