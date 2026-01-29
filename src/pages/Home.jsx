@@ -194,6 +194,16 @@ export default function Home() {
           )}
         </section>
 
+        {/* Suggested for Today */}
+        <section className="mb-8">
+          <h2 className="text-xs font-light text-gray-500 tracking-widest uppercase mb-6">Suggested for Today</h2>
+          <div className="space-y-3">
+            <div className="border border-gray-200 rounded p-4">
+              <p className="text-sm text-gray-700">Based on your recent wears and preferences, we'll suggest fragrances here.</p>
+            </div>
+          </div>
+        </section>
+
         {/* Recent */}
         {recentLogs.length > 0 && (
           <section>
