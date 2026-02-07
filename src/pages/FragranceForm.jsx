@@ -12,6 +12,7 @@ export default function AddFragrance() {
     brand: "",
     type: "",
     notes: "",
+    scent_family: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function AddFragrance() {
           brand: data.brand || "",
           type: data.type || "",
           notes: data.notes || "",
+          scent_family: data.scent_family || "",
         });
       }
     }
@@ -64,6 +66,7 @@ export default function AddFragrance() {
           brand: form.brand,
           type: form.type,
           notes: form.notes,
+          scent_family: form.scent_family,
         })
         .eq("id", id)
         .eq("user_id", user.id));
@@ -76,6 +79,7 @@ export default function AddFragrance() {
           brand: form.brand,
           type: form.type,
           notes: form.notes,
+          scent_family: form.scent_family,
         },
       ]));
     }
@@ -128,6 +132,22 @@ export default function AddFragrance() {
                   <option>EDT</option>
                   <option>Parfum</option>
                   <option>Cologne</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500 mb-3 tracking-widest uppercase">Scent Profile</label>
+                <select name="scent_family" value={form.scent_family} onChange={handleChange} className="w-full border-b border-gray-300 px-0 py-3 bg-white focus:outline-none focus:border-black transition text-sm">
+                  <option value="">Select</option>
+                  <option>Fresh</option>
+                  <option>Citrus</option>
+                  <option>Woody</option>
+                  <option>Oriental</option>
+                  <option>Floral</option>
+                  <option>Gourmand</option>
+                  <option>Aquatic</option>
+                  <option>Spicy</option>
+                  <option>Green</option>
                 </select>
               </div>
 

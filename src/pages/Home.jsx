@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import AddLog from "./AddLog";
 import { useNavigate } from "react-router-dom";
+import { recommendScent } from "../lib/reccomendScent";
+import { getSimplifiedWeather } from "../lib/weather";
 
 export default function Home() {
   const [todayLogs, setTodayLogs] = useState([]);
   const [recentLogs, setRecentLogs] = useState([]);
   const [expandedLog, setExpandedLog] = useState(null);
+  const [suggestion, setSuggestion] = useState(null);
+  const [loadingSuggestion, setLoadingSuggestion] = useState(true);
 
   const navigate = useNavigate();
   // const today = new Date().toISOString().split("T")[0];
@@ -19,6 +23,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchLogs();
+    fetchSuggestion();
   }, []);
 
   async function handleSignOut() {
@@ -73,6 +78,21 @@ export default function Home() {
       setRecentLogs(formattedRecent);
     } else {
       setRecentLogs([]);
+    }
+  }
+
+  async function fetchSuggestion() {
+    try {
+      const weather = await getSimplifiedWeather();
+      console.log("Weather data:", weather);
+      const result = await recommendScent(weather);
+      console.log("Recommendation result:", result);
+
+      setSuggestion(result);
+    } catch (err) {
+      console.error("Suggestion error:", err);
+    } finally {
+      setLoadingSuggestion(false);
     }
   }
 
@@ -197,11 +217,26 @@ export default function Home() {
         {/* Suggested for Today */}
         <section className="mb-8">
           <h2 className="text-xs font-light text-gray-500 tracking-widest uppercase mb-6">Suggested for Today</h2>
-          <div className="space-y-3">
+
+          {loadingSuggestion ? (
             <div className="border border-gray-200 rounded p-4">
-              <p className="text-sm text-gray-700">Based on your recent wears and preferences, we'll suggest fragrances here.</p>
+              <p className="text-sm text-gray-400">Finding your scent...</p>
             </div>
-          </div>
+          ) : suggestion ? (
+            <div className="border border-gray-200 rounded p-4">
+              <p className="text-base font-serif font-light text-black">
+                {suggestion.fragrance.brand} — {suggestion.fragrance.name}
+              </p>
+
+              <p className="text-xs text-gray-400 mt-1">Score: {suggestion.score.toFixed(2)}</p>
+
+              <p className="text-sm text-gray-600 mt-2">{suggestion.reason}</p>
+            </div>
+          ) : (
+            <div className="border border-gray-200 rounded p-4">
+              <p className="text-sm text-gray-400">Add fragrances and logs to receive recommendations.</p>
+            </div>
+          )}
         </section>
 
         {/* Recent */}

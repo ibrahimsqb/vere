@@ -1,4 +1,4 @@
-const OPEN_WEATHER_API_KEY = import.meta.env.OPEN_WEATHER_API_KEY;
+const OPEN_WEATHER_API_KEY = import.meta.env.VITE_OPEN_WEATHER_KEY;
 
 export const getUserLocation = () => {
   return new Promise((resolve, reject) => {
