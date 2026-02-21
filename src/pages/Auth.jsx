@@ -7,14 +7,20 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [verificationSent, setVerificationSent] = useState(false);
 
   const handleAuth = async () => {
     setLoading(true);
     setError("");
+    setVerificationSent(false);
 
     const { error } = isSignUp ? await supabase.auth.signUp({ email, password }) : await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+    } else if (isSignUp) {
+      setVerificationSent(true);
+    }
     setLoading(false);
   };
 
@@ -24,6 +30,14 @@ export default function Auth() {
         {/* Brand */}
         <h1 className="text-4xl font-serif font-light text-black text-center mb-2 tracking-wide">VÉRÉ</h1>
         <p className="text-center text-sm text-gray-500 mb-12">A personal fragrance journal</p>
+
+        {/* Verification Message */}
+        {verificationSent && (
+          <div className="bg-green-50 border border-green-200 rounded p-4 mb-6">
+            <p className="text-sm text-green-800 text-center mb-2 font-medium">Verification Email Sent</p>
+            <p className="text-xs text-green-700 text-center leading-relaxed">An email was sent to you to verify your account. Click the link in the email to verify, then you can come back and login.</p>
+          </div>
+        )}
 
         {/* Error */}
         {error && <p className="text-sm text-red-500 mb-6 text-center">{error}</p>}
