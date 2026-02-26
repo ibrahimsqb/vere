@@ -13,7 +13,7 @@ const WEATHER_MATCH = {
 };
 
 async function fetchFragrances(userId) {
-  const { data, error } = await supabase.from("fragrances").select("*").eq("user_id", userId);
+  const { data, error } = await supabase.from("fragrances").select("*").eq("user_id", userId).is("deleted_at", null);
 
   if (error) {
     console.error("Fragrances query error:", error);
